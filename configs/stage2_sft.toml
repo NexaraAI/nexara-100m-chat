@@ -1,0 +1,44 @@
+[run]
+project_name = "nexara-stage2"
+seed = 1337
+device = "auto"
+output_dir = "checkpoints/stage2/sft_3000"
+log_dir = "logs/stage2/sft_3000"
+
+[data]
+train_path = "datasets/processed/sft_train_3000.jsonl"
+validation_path = "datasets/processed/sft_val.jsonl"
+block_size = 256
+batch_size = 32
+num_workers = 0
+
+[tokenizer]
+path = "tokenizer/nexara-bpe.json"
+
+[model]
+vocab_size = 8192
+max_sequence_length = 256
+n_layers = 6
+n_heads = 8
+embedding_dim = 256
+dropout = 0.1
+mlp_ratio = 4.0
+bias = false
+rope_base = 10000.0
+tie_embeddings = true
+
+[training]
+max_steps = 500
+learning_rate = 0.00005
+weight_decay = 0.1
+beta1 = 0.9
+beta2 = 0.95
+grad_clip = 1.0
+gradient_accumulation_steps = 4
+precision = "fp16"
+log_interval = 10
+eval_interval = 50
+eval_batches = 10
+checkpoint_interval = 50
+resume_from = "checkpoints/stage1/best.pt"
+warmup_steps = 50

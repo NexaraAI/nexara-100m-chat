@@ -1,0 +1,49 @@
+[run]
+project_name = "nexara-100m-sft"
+seed = 1337
+device = "cuda"
+output_dir = "checkpoints/stage2_100m/sft"
+log_dir = "logs/stage2_100m/sft"
+
+[data]
+train_path = "datasets/processed/sft_train_30000.jsonl"
+validation_path = "datasets/processed/sft_val.jsonl"
+block_size = 512
+batch_size = 32
+num_workers = 2
+
+[tokenizer]
+path = "tokenizer/nexara-bpe-16k.json"
+
+[model]
+vocab_size = 16384
+max_sequence_length = 512
+n_layers = 12
+n_heads = 12
+embedding_dim = 768
+dropout = 0.1
+mlp_ratio = 4.0
+bias = false
+rope_base = 10000.0
+tie_embeddings = true
+
+[training]
+max_steps = 14062
+learning_rate = 3e-5
+weight_decay = 0.15
+beta1 = 0.9
+beta2 = 0.95
+grad_clip = 1.0
+gradient_accumulation_steps = 4
+precision = "fp16"
+log_interval = 10
+eval_interval = 300
+eval_batches = 10
+checkpoint_interval = 1000
+resume_from = "checkpoints/stage1_100m/stage_c_100000/clean_model.pt"
+warmup_steps = 1000
+
+
+
+
+

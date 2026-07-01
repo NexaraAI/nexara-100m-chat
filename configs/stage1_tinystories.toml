@@ -1,0 +1,79 @@
+[run]
+project_name = "nexara-stage1"
+seed = 1337
+device = "auto"
+output_dir = "checkpoints/stage1"
+log_dir = "logs/stage1"
+
+[data]
+train_path = "datasets/processed/tinystories_train.jsonl"
+validation_path = "datasets/processed/tinystories_validation.jsonl"
+train_cache_path = "datasets/processed/tinystories_train_tokens.bin"
+validation_cache_path = "datasets/processed/tinystories_validation_tokens.bin"
+use_token_cache = true
+streaming = false
+memory_map = true
+text_key = "text"
+block_size = 256
+batch_size = 32
+num_workers = 0
+max_train_documents = 0
+max_validation_documents = 0
+
+[tinystories]
+variant = "original"
+raw_train_path = "datasets/raw/TinyStories-train.txt"
+raw_validation_path = "datasets/raw/TinyStories-valid.txt"
+train_url = "https://huggingface.co/datasets/roneneldan/TinyStories/resolve/main/TinyStories-train.txt"
+validation_url = "https://huggingface.co/datasets/roneneldan/TinyStories/resolve/main/TinyStories-valid.txt"
+
+[tokenizer]
+path = "tokenizer/nexara-bpe.json"
+vocab_size = 8192
+min_frequency = 2
+sample_texts = [
+  "Once upon a time",
+  "The little dog was",
+  "Lily wanted to",
+  "The sun was shining",
+  "Tom and his sister",
+  "There was a small bird",
+  "Ben went to school",
+  "The rabbit saw a flower"
+]
+
+[model]
+vocab_size = 8192
+max_sequence_length = 256
+n_layers = 6
+n_heads = 8
+embedding_dim = 256
+dropout = 0.1
+mlp_ratio = 4.0
+bias = false
+rope_base = 10000.0
+tie_embeddings = true
+
+[training]
+max_epochs = 10
+max_steps = 100000
+learning_rate = 0.0003
+weight_decay = 0.1
+beta1 = 0.9
+beta2 = 0.95
+grad_clip = 1.0
+gradient_accumulation_steps = 4
+precision = "fp16"
+log_interval = 100
+eval_interval = 500
+eval_batches = 100
+checkpoint_interval = 500
+resume_from = ""
+
+[generation]
+max_new_tokens = 128
+temperature = 0.8
+top_k = 40
+top_p = 0.95
+repetition_penalty = 1.1
+

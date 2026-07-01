@@ -1,0 +1,46 @@
+name: Train Smoke
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  train-smoke:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+
+      - name: Tiny training step
+        run: python -m scripts.train_smoke --output-dir logs/train_smoke
+
+      - name: Overfit validation
+        run: >
+          python -m scripts.run_overfit_validation
+          --output-dir logs/overfit
+          --steps 50
+          --subset-size 20
+          --vocab-size 160
+          --no-update-experiments
+
+      - name: Upload training smoke logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: train-smoke-logs
+          path: |
+            logs/train_smoke/
+            logs/overfit/
+

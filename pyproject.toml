@@ -1,0 +1,53 @@
+[project]
+name = "nexara"
+version = "0.1.0"
+description = "A small conversational language model trained from scratch."
+requires-python = ">=3.11"
+dependencies = [
+  "torch>=2.2",
+  "tokenizers>=0.15",
+  "numpy>=1.26",
+  "tqdm>=4.66",
+  "matplotlib>=3.8",
+]
+
+[project.optional-dependencies]
+experiment = ["wandb>=0.16"]
+dev = ["black>=24.0", "pytest>=8.0", "ruff>=0.5"]
+
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = [
+  "datasets",
+  "datasets.*",
+  "evaluation",
+  "evaluation.*",
+  "inference",
+  "inference.*",
+  "model",
+  "model.*",
+  "scripts",
+  "scripts.*",
+  "tokenizer",
+  "tokenizer.*",
+  "training",
+  "training.*",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.black]
+line-length = 100
+target-version = ["py312"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E9", "F63", "F7", "F82"]

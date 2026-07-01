@@ -1,0 +1,72 @@
+[run]
+project_name = "nexara-100m-stage1"
+seed = 1337
+device = "auto"
+output_dir = "checkpoints/stage1_100m/stage_c_100000"
+log_dir = "logs/stage1_100m/stage_c_100000"
+
+[data]
+train_path = "datasets/processed/mixed_train.jsonl"
+validation_path = "datasets/processed/mixed_validation.jsonl"
+train_cache_path = "datasets/processed/mixed_train_tokens.bin"
+validation_cache_path = "datasets/processed/mixed_validation_tokens.bin"
+use_token_cache = true
+streaming = false
+memory_map = true
+text_key = "text"
+block_size = 512
+batch_size = 32
+num_workers = 2
+max_train_documents = 0
+max_validation_documents = 0
+
+[tokenizer]
+path = "tokenizer/nexara-bpe-16k.json"
+vocab_size = 16384
+min_frequency = 2
+sample_texts = [
+  "Once upon a time",
+  "The little dog was",
+  "Lily wanted to",
+  "The sun was shining",
+  "Tom and his sister",
+  "There was a small bird",
+  "Ben went to school",
+  "The rabbit saw a flower"
+]
+
+[model]
+vocab_size = 16384
+max_sequence_length = 512
+n_layers = 12
+n_heads = 12
+embedding_dim = 768
+dropout = 0.1
+mlp_ratio = 4.0
+bias = false
+rope_base = 10000.0
+tie_embeddings = true
+
+[training]
+max_epochs = 20
+max_steps = 100000
+learning_rate = 0.0003
+weight_decay = 0.1
+beta1 = 0.9
+beta2 = 0.95
+grad_clip = 1.0
+gradient_accumulation_steps = 4
+precision = "fp16"
+log_interval = 100
+eval_interval = 500
+eval_batches = 100
+checkpoint_interval = 500
+resume_from = "checkpoints/stage1_100m/stage_c_100000/step_46000.pt"
+compile = true
+
+[generation]
+max_new_tokens = 128
+temperature = 0.8
+top_k = 40
+top_p = 0.95
+repetition_penalty = 1.1
